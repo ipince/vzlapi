@@ -138,6 +138,9 @@ func fetch(cedula string) (*CedulaInfo, error) {
 	if err != nil {
 		return nil, err
 	}
+	if string(body) == "{}" {
+		return nil, errors.Errorf("cedula %s not found", cedula)
+	}
 
 	resp := ApiResponse{}
 	err = json.Unmarshal(body, &resp)
@@ -173,7 +176,7 @@ func fetch(cedula string) (*CedulaInfo, error) {
 		ActaBucketURL: lo.Ternary(resp.Acta.DO_DS_NAME == "", "", fmt.Sprintf("https://elecciones2024ve.s3.amazonaws.com/%s", resp.Acta.DO_DS_NAME)),
 		ActaStaticURL: lo.Ternary(resp.Acta.DO_DS_NAME == "", "", fmt.Sprintf("https://static.resultadosconvzla.com/%s", resp.Acta.DO_DS_NAME)),
 
-		ResultsStateURL:  fmt.Sprintf("%s/estado/%s", resultadosDomain, resp.Person.RE_CD_STATE),
+		ResultsStateURL:  lo.Ternary(resp.Person.RE_CD_STATE == "", "", fmt.Sprintf("%s/estado/%s", resultadosDomain, resp.Person.RE_CD_STATE)),
 		ResultsCountyURL: lo.Ternary(resp.Acta.DO_CD_MUN == "", "", fmt.Sprintf("%s/municipio/%s", resultadosDomain, resp.Acta.DO_CD_MUN)),
 		ResultsParishURL: lo.Ternary(resp.Acta.DO_CD_PAR == "", "", fmt.Sprintf("%s/parroquia/%s", resultadosDomain, resp.Acta.DO_CD_PAR)),
 		ResultsCenterURL: lo.Ternary(resp.Acta.DO_CD_CENTER == "", "", fmt.Sprintf("%s/centro/%s", resultadosDomain, resp.Acta.DO_CD_CENTER)),
