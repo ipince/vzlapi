@@ -11,6 +11,7 @@ import (
 )
 
 var apiEndpoint = "https://gdp.theempire.tech/api/data"
+var resultadosDomain = "https://resultadosconvzla.com"
 
 type CedulaInfo struct {
 	Cedula string
@@ -42,6 +43,7 @@ type CedulaInfo struct {
 	ResultsCountyURL string
 	ResultsParishURL string
 	ResultsCenterURL string
+	ResultsTableURL  string
 }
 
 type ApiResponse struct {
@@ -170,5 +172,11 @@ func fetch(cedula string) (*CedulaInfo, error) {
 		ActaFilename:  resp.Acta.DO_DS_NAME,
 		ActaBucketURL: lo.Ternary(resp.Acta.DO_DS_NAME == "", "", fmt.Sprintf("https://elecciones2024ve.s3.amazonaws.com/%s", resp.Acta.DO_DS_NAME)),
 		ActaStaticURL: lo.Ternary(resp.Acta.DO_DS_NAME == "", "", fmt.Sprintf("https://static.resultadosconvzla.com/%s", resp.Acta.DO_DS_NAME)),
+
+		ResultsStateURL:  fmt.Sprintf("%s/estado/%s", resultadosDomain, resp.Person.RE_CD_STATE),
+		ResultsCountyURL: lo.Ternary(resp.Acta.DO_CD_MUN == "", "", fmt.Sprintf("%s/municipio/%s", resultadosDomain, resp.Acta.DO_CD_MUN)),
+		ResultsParishURL: lo.Ternary(resp.Acta.DO_CD_PAR == "", "", fmt.Sprintf("%s/parroquia/%s", resultadosDomain, resp.Acta.DO_CD_PAR)),
+		ResultsCenterURL: lo.Ternary(resp.Acta.DO_CD_CENTER == "", "", fmt.Sprintf("%s/centro/%s", resultadosDomain, resp.Acta.DO_CD_CENTER)),
+		ResultsTableURL:  lo.Ternary(resp.Acta.DO_CD_TABLE == "", "", fmt.Sprintf("%s/mesa/%s/%s", resultadosDomain, resp.Acta.DO_CD_CENTER, resp.Acta.DO_CD_TABLE)),
 	}, nil
 }

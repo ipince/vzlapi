@@ -20,7 +20,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	info, err := Handle(cedula)
+	info, err := Resolve(cedula)
 	if err != nil {
 		writeErr(w, cedula, err.Error(), http.StatusInternalServerError)
 		return
@@ -42,15 +42,4 @@ func writeErr(w http.ResponseWriter, cedula string, msg string, code int) {
 	resp, _ := json.Marshal(ResponseErr{Error: msg})
 	w.WriteHeader(code)
 	w.Write(resp)
-}
-
-func Handle(cedula string) (*CedulaInfo, error) {
-	info, err := Resolve(cedula)
-	if err != nil {
-		return nil, err
-	}
-
-	FillUrls(info)
-
-	return info, nil
 }
