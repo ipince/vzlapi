@@ -5,7 +5,8 @@ import "strconv"
 type Result struct {
 	ActaFilename string
 
-	ActaCode   string
+	Code string
+
 	CenterCode string
 	Table      string
 
@@ -50,7 +51,7 @@ func (r *Result) asRow() []string {
 	ecp := totals[CandidateRausseo]
 	return []string{
 		r.ActaFilename,
-		r.ActaCode,
+		r.Code,
 		r.CenterCode,
 		r.Table,
 		strconv.Itoa(nmm),

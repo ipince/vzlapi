@@ -20,7 +20,7 @@ func main() {
 		panic(err)
 	}
 
-	f, err := os.Open("./cmd/store_results/resultados.csv")
+	f, err := os.Open("./cmd/store_results/actas.csv")
 	if err != nil {
 		panic(err)
 	}
@@ -38,27 +38,31 @@ func main() {
 		} // skip header
 
 		qr := &qrcode.Result{
-			ActaFilename: record[0],
-			CenterCode:   record[2],
-			Table:        record[3],
+			Code: record[0],
+			//CenterCode:   record[2],
+			//Table:        record[3],
 
 			CandidateVotes: map[string]int{
-				qrcode.CandidateMaduro:   mustInt(record[4]),
-				qrcode.CandidateGonzalez: mustInt(record[5]),
-				qrcode.CandidateMartinez: mustInt(record[6]),
-				qrcode.CandidateBertucci: mustInt(record[7]),
-				qrcode.CandidateBrito:    mustInt(record[8]),
-				qrcode.CandidateEcarri:   mustInt(record[9]),
-				qrcode.CandidateFermin:   mustInt(record[10]),
-				qrcode.CandidateCeballos: mustInt(record[11]),
-				qrcode.CandidateMarquez:  mustInt(record[12]),
-				qrcode.CandidateRausseo:  mustInt(record[13]),
+				qrcode.CandidateMaduro:   mustInt(record[1]),
+				qrcode.CandidateMartinez: mustInt(record[2]),
+				qrcode.CandidateBertucci: mustInt(record[3]),
+				qrcode.CandidateBrito:    mustInt(record[4]),
+				qrcode.CandidateEcarri:   mustInt(record[5]),
+				qrcode.CandidateFermin:   mustInt(record[6]),
+				qrcode.CandidateCeballos: mustInt(record[7]),
+				qrcode.CandidateGonzalez: mustInt(record[8]),
+				qrcode.CandidateMarquez:  mustInt(record[9]),
+				qrcode.CandidateRausseo:  mustInt(record[10]),
 			},
-
-			ValidVotes:   mustInt(record[14]),
-			NullVotes:    mustInt(record[15]),
-			InvalidVotes: mustInt(record[16]),
 		}
+		sum := 0
+		for _, v := range qr.CandidateVotes {
+			sum += v
+		}
+		qr.ValidVotes = sum
+
+		//NullVotes:    mustInt(record[15]),// TODO
+		//InvalidVotes: mustInt(record[16]),// TODO
 
 		err := dbc.UpsertActa(qr)
 		if err != nil {

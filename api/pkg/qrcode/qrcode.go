@@ -187,7 +187,7 @@ func parse(filename, data string) (*Result, error) {
 	}
 
 	result := &Result{
-		ActaCode:     actaCode,
+		Code:         actaCode,
 		CenterCode:   centerCode,
 		Table:        table,
 		ActaFilename: filename,

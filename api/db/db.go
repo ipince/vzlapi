@@ -29,10 +29,7 @@ func (c *Client) Close() {
 func (c *Client) InitTables() error {
 
 	createActasTableSQL := `CREATE TABLE IF NOT EXISTS actas (
-        filename TEXT PRIMARY KEY,
-        
-        center_code TEXT,
-        table_number TEXT,
+        code TEXT PRIMARY KEY,
         
         valid_votes INTEGER,
         null_votes INTEGER,
@@ -60,13 +57,11 @@ func (c *Client) InitTables() error {
 
 func (c *Client) InsertActa(acta *qrcode.Result) error {
 	insertSQL := `INSERT INTO actas (
-        filename, center_code, table_number, valid_votes, null_votes, invalid_votes,
+        code, valid_votes, null_votes, invalid_votes,
         votes_bertucci, votes_brito, votes_ceballos, votes_ecarri, votes_fermin, votes_gonzalez, votes_maduro, votes_martinez, votes_marquez, votes_rausseo
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 	_, err := c.db.Exec(insertSQL,
-		acta.ActaFilename,
-		acta.CenterCode,
-		acta.Table,
+		acta.Code,
 
 		acta.ValidVotes,
 		acta.NullVotes,
@@ -88,7 +83,7 @@ func (c *Client) InsertActa(acta *qrcode.Result) error {
 }
 
 func (c *Client) UpsertActa(acta *qrcode.Result) error {
-	res, err := c.GetActa(acta.ActaFilename)
+	res, err := c.GetActa(acta.Code)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		return err
 	}
@@ -99,19 +94,16 @@ func (c *Client) UpsertActa(acta *qrcode.Result) error {
 	return nil // no-op, acta already in db
 }
 
-func (c *Client) GetActa(filename string) (*qrcode.Result, error) {
-	querySQL := `SELECT * FROM actas WHERE filename = ?`
+func (c *Client) GetActa(code string) (*qrcode.Result, error) {
+	querySQL := `SELECT * FROM actas WHERE code = ?`
 
-	row := c.db.QueryRow(querySQL, filename)
+	row := c.db.QueryRow(querySQL, code)
 
 	var qr qrcode.Result
 
 	var c1, c2, c3, c4, c5, c6, c7, c8, c9, c10 int
 	err := row.Scan(
-		&qr.ActaFilename,
-
-		&qr.CenterCode,
-		&qr.Table,
+		&qr.Code,
 
 		&qr.ValidVotes,
 		&qr.NullVotes,

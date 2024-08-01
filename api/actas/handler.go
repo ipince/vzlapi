@@ -37,7 +37,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dbc.Close()
 
-	acta, err := dbc.GetActa(info.ActaFilename)
+	actaCode := fmt.Sprintf("%s.0%s.1.0001", info.CenterID, info.TableNumber)
+	acta, err := dbc.GetActa(actaCode)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		writeErr(w, cedula, err.Error(), http.StatusInternalServerError)
 		return
