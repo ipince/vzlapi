@@ -2,9 +2,8 @@ FROM golang:1.21 AS build
 
 WORKDIR /go/src
 COPY . .
-WORKDIR /go/src/api
 
-RUN go build -o /app ./main.go
+RUN cd api && go build -o /app ./main.go
 
 FROM gcr.io/distroless/static:latest
 
