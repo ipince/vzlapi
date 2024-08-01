@@ -10,6 +10,6 @@ func main() {
 }
 
 func runServer() {
-	http.HandleFunc("/api/actas", actas.Handler)
+	http.HandleFunc("/actas", actas.Handler)
 	http.ListenAndServe(":8080", nil)
 }
