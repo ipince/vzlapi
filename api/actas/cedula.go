@@ -38,7 +38,10 @@ type CedulaInfo struct {
 	ActaBucketURL string
 	ActaStaticURL string
 
-	ResultsURL string // to be filled later
+	ResultsStateURL  string
+	ResultsCountyURL string
+	ResultsParishURL string
+	ResultsCenterURL string
 }
 
 type ApiResponse struct {
