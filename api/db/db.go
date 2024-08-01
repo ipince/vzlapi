@@ -5,7 +5,8 @@ import (
 	"database/sql"
 	"errors"
 
-	_ "modernc.org/sqlite"
+	_ "github.com/mattn/go-sqlite3"
+	//_ "modernc.org/sqlite"
 )
 
 type Client struct {
@@ -14,7 +15,7 @@ type Client struct {
 
 func New() (*Client, error) {
 	// Connect to SQLite database (creates it if it doesn't exist)
-	db, err := sql.Open("sqlite", "./db/db.sqlite")
+	db, err := sql.Open("sqlite3", "./db/db.sqlite")
 	if err != nil {
 		return nil, err
 	}
