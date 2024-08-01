@@ -3,9 +3,7 @@ FROM golang:1.21 AS build
 WORKDIR /go/src
 COPY . .
 
-RUN cd api && go build -o /app ./main.go
-RUN ls -la /
-RUN ls -la /go/src
+RUN GOOS=$TARGETOS GOARCH=$TARGETARCH cd api && go build -ldflags '-extldflags "-static"' -tags osusergo,netgo -o /app ./main.go
 
 FROM gcr.io/distroless/static:latest
 
