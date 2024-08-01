@@ -16,7 +16,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	cedula := r.URL.Query().Get("cedula")
 	if cedula == "" {
-		writeErr(w, "<none", "missing required param 'cedula'", http.StatusBadRequest)
+		writeErr(w, "<none>", "missing required param 'cedula'", http.StatusBadRequest)
 		return
 	}
 
