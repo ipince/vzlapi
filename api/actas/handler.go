@@ -1,7 +1,11 @@
 package actas
 
 import (
+	"api/db"
+	"api/pkg/qrcode"
+	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -26,6 +30,22 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	dbc, err := db.New()
+	if err != nil {
+		writeErr(w, cedula, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer dbc.Close()
+
+	acta, err := dbc.GetActa(info.ActaFilename)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		writeErr(w, cedula, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if acta != nil {
+		fillVotes(info, acta)
+	}
+
 	jsonResponse, err := json.Marshal(info)
 	if err != nil {
 		writeErr(w, cedula, err.Error(), http.StatusInternalServerError)
@@ -42,4 +62,12 @@ func writeErr(w http.ResponseWriter, cedula string, msg string, code int) {
 	resp, _ := json.Marshal(ResponseErr{Error: msg})
 	w.WriteHeader(code)
 	w.Write(resp)
+}
+
+func fillVotes(info *CedulaInfo, acta *qrcode.Result) {
+	info.ActaValidVotes = acta.ValidVotes
+	info.ActaNullVotes = acta.NullVotes
+	info.ActaInvalidVotes = acta.InvalidVotes
+
+	info.ActaCandidateVotes = acta.CandidateVotes
 }

@@ -39,6 +39,12 @@ type CedulaInfo struct {
 	ActaBucketURL string
 	ActaStaticURL string
 
+	ActaValidVotes   int
+	ActaNullVotes    int
+	ActaInvalidVotes int
+
+	ActaCandidateVotes map[string]int
+
 	ResultsStateURL  string
 	ResultsCountyURL string
 	ResultsParishURL string
@@ -87,7 +93,7 @@ type ApiResponse struct {
 		DO_CD_SESSION        string //  "127df6ad-e42c-41e1-a0c3-568eb00af313",
 		DO_CD_TYPE           string //  null,
 		DO_DS_SERIAL         string //  "656297",
-		DO_BO_BOUND          string //  null,
+		DO_BO_BOUND          bool   //  null,
 		DO_BO_DUPLICATE      string //  null,
 		DO_BO_AUTO_DETECT    string //  null,
 		DO_NU_QUALITY        string //  null,
@@ -180,6 +186,6 @@ func fetch(cedula string) (*CedulaInfo, error) {
 		ResultsCountyURL: lo.Ternary(resp.Acta.DO_CD_MUN == "", "", fmt.Sprintf("%s/municipio/%s", resultadosDomain, resp.Acta.DO_CD_MUN)),
 		ResultsParishURL: lo.Ternary(resp.Acta.DO_CD_PAR == "", "", fmt.Sprintf("%s/parroquia/%s", resultadosDomain, resp.Acta.DO_CD_PAR)),
 		ResultsCenterURL: lo.Ternary(resp.Acta.DO_CD_CENTER == "", "", fmt.Sprintf("%s/centro/%s", resultadosDomain, resp.Acta.DO_CD_CENTER)),
-		ResultsTableURL:  lo.Ternary(resp.Acta.DO_CD_TABLE == "", "", fmt.Sprintf("%s/mesa/%s/%s", resultadosDomain, resp.Acta.DO_CD_CENTER, resp.Acta.DO_CD_TABLE)),
+		ResultsTableURL:  lo.Ternary(resp.Acta.DO_CD_TABLE == "" || resp.Acta.DO_CD_CENTER == "", "", fmt.Sprintf("%s/mesa/%s/%s", resultadosDomain, resp.Acta.DO_CD_CENTER, resp.Acta.DO_CD_TABLE)),
 	}, nil
 }

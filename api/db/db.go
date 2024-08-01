@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"errors"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 type Client struct {
@@ -14,12 +14,16 @@ type Client struct {
 
 func New() (*Client, error) {
 	// Connect to SQLite database (creates it if it doesn't exist)
-	db, err := sql.Open("sqlite3", "./db/db.sqlite")
+	db, err := sql.Open("sqlite", "./db/db.sqlite")
 	if err != nil {
 		return nil, err
 	}
 
 	return &Client{db: db}, nil
+}
+
+func (c *Client) Close() {
+	c.db.Close()
 }
 
 func (c *Client) InitTables() error {
@@ -110,8 +114,8 @@ func (c *Client) GetActa(filename string) (*qrcode.Result, error) {
 		&qr.Table,
 
 		&qr.ValidVotes,
-		&qr.ValidVotes,
-		&qr.ValidVotes,
+		&qr.NullVotes,
+		&qr.InvalidVotes,
 
 		&c1, &c2, &c3, &c4, &c5, &c6, &c7, &c8, &c9, &c10,
 	)
