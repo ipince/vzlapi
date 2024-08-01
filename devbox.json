@@ -10,6 +10,7 @@
       "echo 'Welcome to devbox!' > /dev/null"
     ],
     "scripts": {
+      "build": "cd api && go build ./main.go",
       "start": "cd api && go run ./main.go"
     }
   }
