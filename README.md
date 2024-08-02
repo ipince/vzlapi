@@ -4,7 +4,7 @@
 
 1. Tener la **[data](https://docs.google.com/spreadsheets/d/1l6ThiQQZXog_8fBw3z5RwqThG7QAy0AqF4wPYpvGUWA/edit?gid=1712398662#gid=1712398662
    )** mas completa y confiable sobre las elecciones presidenciales 2024 en Venezuela.
-2. Hacer la data publica a traves de un **[API](https://api.vzlapi.com/actas?cedula?4000000)**, para que quien quiera la pueda accesar..
+2. Hacer la data publica a traves de un **[API](https://api.vzlapi.com/actas?cedula?4000000)**, para que quien quiera la pueda accesar.
 
 A futuro, me gustaria expandir el "scope" y recolectar y difundir mas data relacionada Venezuela, no tan solo enfocada en las elecciones presidenciales.
 
@@ -25,7 +25,7 @@ Tambien contamos con un archivo de ~12GB con todas las imagenes de ~24mil actas.
 - Actas (data): La data extraida del codigo QR de casi todas (~22mil de ~24mil) de las actas digitalizadas. Data proviene del procesamiento de imagenes.
 
 ### Algunas cosas por destacar
-- La data de las actas (los votos) NO es tomada de resultadosconvzla.com. TODA es extraida por nosotros de las imagenes de las actas utilizando lector de codigo QR.
+- La data de las actas (los votos) NO es tomada de resultadosconvzla.com. TODA es extraida por nosotros de las imagenes de las actas utilizando lector de codigo QR. Asi no tenemos que confiar en un tercero para la validez de la data.
 - Por ende, la data es mas completa que la data de resultadosconvzla.com. Aqui tambien tenemos los votos por cada uno de los 10 candidatos, y los votos nulos (no todos 0) e invalidos (todos 0).
 
 ## Herramientas
