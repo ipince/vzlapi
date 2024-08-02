@@ -2,7 +2,12 @@
 
 Serving at https://api.vzlapi.com, an open API for venezuelan-related data.
 
-## Example
+# DATA
+https://docs.google.com/spreadsheets/d/1l6ThiQQZXog_8fBw3z5RwqThG7QAy0AqF4wPYpvGUWA/edit?gid=1712398662#gid=1712398662
+
+^ That's a Google spreadsheet with the processed actas, and with links to the corresponding pages in resultadosconvzla.com
+
+## API Example
 
 The `/actas` returns information about actas (voting machine receipts) for the 7/28/2024 Presidential elections.
 
