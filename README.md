@@ -37,7 +37,7 @@ Hemos procesado actas de distintas fuentas (ademas de la nuestra propia), e inte
 
 # 2. API -- https://api.vzlapi.com/
 
-Por ahora solo hay un endpoint, `/actas`, que acepta una cedula y regresa informacion del votante, su centro electoral, y la informacion que tenemos de ese centro electoral.
+La idea es que toda la data mencionada arriba sea facilmente accesible a traves del API. Por ahora solo hay un endpoint, `/actas`, que acepta una cedula y regresa informacion del votante, su centro electoral, y la informacion que tenemos de ese centro electoral.
 
 Ejemplo:
 ```
@@ -92,6 +92,10 @@ Ejemplo:
   "ResultsTableURL": "https://resultadosconvzla.com/mesa/7433/7362"
 }
 ```
+
+Estamos utilizando el API de gdp.theempire.tech para ir de cedula -> centro ([ejemplo](https://gdp.theempire.tech/api/data?cdi=V4000000)), pero nos gustaria tener nuestras propia fuente de informacion, para no depender de un tercero y para que el API sea mas rapido.
+
+Igualmente creo que es mas util acceder a la informacion por centro/estado/municipio, etc., que empezando por una cedula.
 
 ## Corer localmente
 
