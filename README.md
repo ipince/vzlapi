@@ -14,8 +14,11 @@ Preguntas/problemas, o quieres ayudar? Agrega un [issue](https://github.com/ipin
 
 ## Contenido
 
-Por ahora, contamos con la siguiente data, mas facilmente accesible en Google Sheets:
+Data elecciones 2024
 https://docs.google.com/spreadsheets/d/1l6ThiQQZXog_8fBw3z5RwqThG7QAy0AqF4wPYpvGUWA/edit?gid=1712398662#gid=1712398662
+
+Data elecciones presidenciales, desde 1998-2024, excluyendo la del 2018
+https://docs.google.com/spreadsheets/d/1LdwSkmJwWlb-wSapDmYORcd5-VE0yoeqhq_9lXKd5M0/edit?gid=1705617688#gid=1705617688
 
 Tambien contamos con un archivo de ~12GB con todas las imagenes de ~24mil actas. (Tengo que ponerlo en un lugar publico, pero es el mismo que otras personas han publicado).
 
