@@ -3,10 +3,12 @@ package db
 import (
 	"api/pkg/qrcode"
 	"database/sql"
+	"encoding/csv"
 	"errors"
+	"os"
+	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
-	//_ "modernc.org/sqlite"
 )
 
 type Client struct {
@@ -130,4 +132,111 @@ func (c *Client) GetActa(code string) (*qrcode.Result, error) {
 	}
 
 	return &qr, nil
+}
+func (c *Client) InitTablesMCM() error {
+	createActasMariaCorinaTableSQL := `CREATE TABLE IF NOT EXISTS actas_mcm (
+        ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        CODIGO_ESTADO INTEGER,
+        ESTADO TEXT,
+        CODIGO_MUNICIPIO INTEGER,
+        MUNICIPIO TEXT,
+        COD_PARROQUIA INTEGER,
+        PARROQUIA TEXT,
+        CENTRO INTEGER,
+        MESA INTEGER,
+        RE INTEGER,
+        VOTOS_VALIDOS INTEGER,
+        VOTOS_NULOS INTEGER,
+        EDMUNDO_GONZALEZ INTEGER,
+        NICOLAS_MADURO INTEGER,
+        LUIS_MARTINEZ INTEGER,
+        JAVIER_BERTUCCI INTEGER,
+        JOSE_BRITO INTEGER,
+        ANTONIO_ECARRI INTEGER,
+        CLAUDIO_FERMIN INTEGER,
+        DANIEL_CEBALLOS INTEGER,
+        ENRIQUE_MARQUEZ INTEGER,
+        BENJAMMIN_RAUSSEO INTEGER,
+        URL TEXT
+    );`
+
+	_, err := c.db.Exec(createActasMariaCorinaTableSQL)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Client) InsertActaMariaCorina(record []string) error {
+	insertSQL := `INSERT INTO actas_mcm (
+        CODIGO_ESTADO, ESTADO, CODIGO_MUNICIPIO, MUNICIPIO, COD_PARROQUIA, PARROQUIA, CENTRO, MESA, RE,
+        VOTOS_VALIDOS, VOTOS_NULOS, EDMUNDO_GONZALEZ, NICOLAS_MADURO, LUIS_MARTINEZ, JAVIER_BERTUCCI,
+        JOSE_BRITO, ANTONIO_ECARRI, CLAUDIO_FERMIN, DANIEL_CEBALLOS, ENRIQUE_MARQUEZ, BENJAMMIN_RAUSSEO, URL
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+
+	codigoEstado, _ := strconv.Atoi(record[0])
+	codigoMunicipio, _ := strconv.Atoi(record[2])
+	codParroquia, _ := strconv.Atoi(record[4])
+	centro, _ := strconv.Atoi(record[6])
+	mesa, _ := strconv.Atoi(record[7])
+	re, _ := strconv.Atoi(record[8])
+	votosValidos, _ := strconv.Atoi(record[9])
+	votosNulos, _ := strconv.Atoi(record[10])
+	edmundoGonzalez, _ := strconv.Atoi(record[11])
+	nicolasMaduro, _ := strconv.Atoi(record[12])
+	luisMartinez, _ := strconv.Atoi(record[13])
+	javierBertucci, _ := strconv.Atoi(record[14])
+	joseBrito, _ := strconv.Atoi(record[15])
+	antonioEcarri, _ := strconv.Atoi(record[16])
+	claudioFermin, _ := strconv.Atoi(record[17])
+	danielCeballos, _ := strconv.Atoi(record[18])
+	enriqueMarquez, _ := strconv.Atoi(record[19])
+	benjamminRausseo, _ := strconv.Atoi(record[20])
+	url := record[21]
+
+	_, err := c.db.Exec(insertSQL, codigoEstado, record[1], codigoMunicipio, record[3], codParroquia,
+		record[5], centro, mesa, re, votosValidos, votosNulos, edmundoGonzalez, nicolasMaduro,
+		luisMartinez, javierBertucci, joseBrito, antonioEcarri, claudioFermin, danielCeballos,
+		enriqueMarquez, benjamminRausseo, url)
+	return err
+}
+
+func (c *Client) UpsertActaMariaCorina(record []string) error {
+
+	return c.InsertActaMariaCorina(record)
+}
+
+func (c *Client) ImportCSVForMariaCorina() error {
+	file, err := os.Open("./actas_mcm.csv")
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	reader := csv.NewReader(file)
+	records, err := reader.ReadAll()
+	if err != nil {
+		return err
+	}
+
+	for _, record := range records {
+		err := c.UpsertActaMariaCorina(record)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func GetCenterData(dbc *Client, centro int) (*sql.Rows, error) {
+	query := `SELECT CODIGO_ESTADO, ESTADO, CODIGO_MUNICIPIO, MUNICIPIO, 
+	COD_PARROQUIA, PARROQUIA, MESA, VOTOS_VALIDOS, VOTOS_NULOS, 
+	EDMUNDO_GONZALEZ, NICOLAS_MADURO, LUIS_MARTINEZ, JAVIER_BERTUCCI, 
+	JOSE_BRITO, ANTONIO_ECARRI, CLAUDIO_FERMIN, DANIEL_CEBALLOS, 
+	ENRIQUE_MARQUEZ, BENJAMMIN_RAUSSEO, URL 
+	FROM actas_mcm WHERE CENTRO = ?`
+	dbc.db.Query(query, centro)
+	return dbc.db.Query(query, centro)
 }
