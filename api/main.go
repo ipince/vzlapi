@@ -14,6 +14,7 @@ func main() {
 
 func runServer() {
 	http.HandleFunc("/actas", actas.Handler)
+	// example: http://localhost:8080/actas/centros?centro=10113042
 	http.HandleFunc("/actas/centros", centers.Handler)
 	http.HandleFunc("/", defaultHandler)
 	http.ListenAndServe(":8080", nil)
