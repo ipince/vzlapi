@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados Electorales</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        .titulo {
+            font-family: "Bebas Neue", sans-serif;
+            text-transform: uppercase;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        #reader {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            display: none;
+        }
+        #startScannerButton {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            display: block;
+        }
+        .candidate-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .candidate-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .parties {
+            font-size: 1rem;
+            margin-left: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="titulo">Resultados Electorales</h1>
+        <button id="startScannerButton" onclick="startScanner()" class="btn btn-dark">Iniciar Escáner QR</button>
+        <div id="reader"></div>
+        <div id="results" class="mt-4"></div>
+    </div>
+
+    <!-- Cargar la librería html5-qrcode -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+
+    <script>
+        function processData(dataInput) {
+            const data = dataInput.split('!')[1].split(',');
+
+            const candidates = [
+                { name: 'Nicolás Maduro', votes: 0, parties: [
+                    { name: 'PSUV', votes: parseInt(data[0]) },
+                    { name: 'PCV', votes: parseInt(data[1]) },
+                    { name: 'TUPAMARO', votes: parseInt(data[2]) },
+                    { name: 'PPT', votes: parseInt(data[3]) },
+                    { name: 'MSV', votes: parseInt(data[4]) },
+                    { name: 'PODEMOS', votes: parseInt(data[5]) },
+                    { name: 'MEP', votes: parseInt(data[6]) },
+                    { name: 'APC', votes: parseInt(data[7]) },
+                    { name: 'ORA', votes: parseInt(data[8]) },
+                    { name: 'UPV', votes: parseInt(data[9]) },
+                    { name: 'EV', votes: parseInt(data[10]) },
+                    { name: 'PVV', votes: parseInt(data[11]) },
+                    { name: 'PFV', votes: parseInt(data[12]) },
+                ]},
+                { name: 'Luis Martínez', votes: 0, parties: [
+                    { name: 'AD', votes: parseInt(data[13]) },
+                    { name: 'COPEI', votes: parseInt(data[14]) },
+                    { name: 'MR', votes: parseInt(data[15]) },
+                    { name: 'BR', votes: parseInt(data[16]) },
+                    { name: 'DDP', votes: parseInt(data[17]) },
+                    { name: 'UNE', votes: parseInt(data[18]) },
+                ]},
+                { name: 'Javier Bertucci', votes: 0, parties: [
+                    { name: 'EL CAMBIO', votes: parseInt(data[19]) },
+                ]},
+                { name: 'José Brito', votes: 0, parties: [
+                    { name: 'PV', votes: parseInt(data[20]) },
+                    { name: 'VU', votes: parseInt(data[21]) },
+                    { name: 'UVV', votes: parseInt(data[22]) },
+                    { name: 'MPJ', votes: parseInt(data[23]) },
+                ]},
+                { name: 'Antonio Ecarri', votes: 0, parties: [
+                    { name: 'AP', votes: parseInt(data[24]) },
+                    { name: 'MOVEV', votes: parseInt(data[25]) },
+                    { name: 'CMC', votes: parseInt(data[26]) },
+                    { name: 'FV', votes: parseInt(data[27]) },
+                    { name: 'ALIANZA DEL LAPIZ', votes: parseInt(data[28]) },
+                    { name: 'MIN UNIDAD', votes: parseInt(data[29]) },
+                ]},
+                { name: 'Claudio Fermín', votes: 0, parties: [
+                    { name: 'SPV', votes: parseInt(data[30]) },
+                ]},
+                { name: 'Daniel Ceballos', votes: 0, parties: [
+                    { name: 'VPA', votes: parseInt(data[31]) },
+                    { name: 'AREPA', votes: parseInt(data[32]) },
+                ]},
+                { name: 'Edmundo González', votes: 0, parties: [
+                    { name: 'UNTC', votes: parseInt(data[33]) },
+                    { name: 'MPV', votes: parseInt(data[34]) },
+                    { name: 'MUD', votes: parseInt(data[35]) },
+                ]},
+                { name: 'Enrique Marquez', votes: 0, parties: [
+                    { name: 'CENTRADOS', votes: parseInt(data[36]) },
+                ]},
+                { name: 'Benjamín Rausseo', votes: 0, parties: [
+                    { name: 'CONDE', votes: parseInt(data[37]) },
+                ]},
+            ];
+
+            candidates.forEach(candidate => {
+                candidate.votes = candidate.parties.reduce((sum, party) => sum + party.votes, 0);
+            });
+
+            candidates.sort((a, b) => b.votes - a.votes);
+
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            candidates.forEach(candidate => {
+                const candidateDiv = document.createElement('div');
+                candidateDiv.className = 'candidate-box';
+                candidateDiv.innerHTML = `<span class="candidate-name">${candidate.name}: ${candidate.votes}</span>
+                                          <div class="parties">${candidate.parties.map(party => `${party.name}: ${party.votes}`).join(', ')}</div>`;
+                resultsDiv.appendChild(candidateDiv);
+            });
+        }
+
+        function startScanner() {
+            document.getElementById('reader').style.display = 'block';
+            const html5QrCode = new Html5Qrcode("reader");
+
+            html5QrCode.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: 250
+                },
+                (decodedText, decodedResult) => {
+                    processData(decodedText);
+                    html5QrCode.stop().then(ignore => {
+                        document.getElementById('reader').style.display = 'none';
+                    }).catch(err => {
+                        console.error(err);
+                    });
+                },
+                (errorMessage) => {
+                    console.warn(`Error al escanear el código:: ${errorMessage}`);
+                }
+            ).catch(err => {
+                console.error(`Error al escanear el código: ${err}`);
+            });
+        }
+    </script>
+
+</body>
+</html>
