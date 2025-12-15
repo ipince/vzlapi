@@ -129,7 +129,7 @@ type ApiResponse struct {
 }
 
 func Resolve(cedula string) (*CedulaInfo, error) {
-	return retry(func() (*CedulaInfo, error) {
+	return Retry(func() (*CedulaInfo, error) {
 		return fetch(cedula)
 	}, 3, 1000)
 }

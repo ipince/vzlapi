@@ -3,7 +3,8 @@
   "packages": [
     "go@latest",
     "sqlite@latest",
-    "clang@latest"
+    "clang@latest",
+    "wget@latest"
   ],
   "shell": {
     "init_hook": [

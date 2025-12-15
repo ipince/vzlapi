@@ -1,0 +1,11 @@
+2024-08-05T20:09:59.6NZ mysqld_safe Logging to 'mysqldb/Rodrigos-MacBook-Pro-13.err'.
+2024-08-05T20:09:59.6NZ mysqld_safe Starting mysqld daemon with databases from mysqldb
+2024-08-05T20:10:01.693280Z 0 [System] [MY-015015] [Server] MySQL Server - start.
+2024-08-05T20:10:02.142082Z 0 [System] [MY-010116] [Server] /usr/local/opt/mysql/bin/mysqld (mysqld 9.0.1) starting as process 82951
+2024-08-05T20:10:02.147964Z 0 [Warning] [MY-010091] [Server] Can't create test file /usr/local/Cellar/mysql/9.0.1/mysqldb/mysqld_tmp_file_case_insensitive_test.lower-test
+2024-08-05T20:10:02.147973Z 0 [Warning] [MY-010159] [Server] Setting lower_case_table_names=2 because file system for /usr/local/Cellar/mysql/9.0.1/mysqldb/ is case insensitive
+2024-08-05T20:10:02.148006Z 0 [ERROR] [MY-013276] [Server] Failed to set datadir to '/usr/local/Cellar/mysql/9.0.1/mysqldb/' (OS errno: 2 - No such file or directory)
+2024-08-05T20:10:02.148097Z 0 [ERROR] [MY-010119] [Server] Aborting
+2024-08-05T20:10:02.150252Z 0 [System] [MY-010910] [Server] /usr/local/opt/mysql/bin/mysqld: Shutdown complete (mysqld 9.0.1)  Homebrew.
+2024-08-05T20:10:02.150257Z 0 [System] [MY-015016] [Server] MySQL Server - end.
+2024-08-05T20:10:02.6NZ mysqld_safe mysqld from pid file mysqldb/Rodrigos-MacBook-Pro-13.pid ended
